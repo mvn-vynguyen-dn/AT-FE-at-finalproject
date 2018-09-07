@@ -1,18 +1,23 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const EventSchema = new Schema({
-  date: {
-    type: Date,
-  },
-  time: {
+const PlanSchema = new Schema({
+  datetime: {
     type: String,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
-  listFriend: {
+  peoples: {
+    type: Array,
+    "default": [],
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+  timeline: {
     type: Array,
     "default": [],
   }
@@ -20,20 +25,24 @@ const EventSchema = new Schema({
   versionKey: false,
 })
 
-const Event = module.exports = mongoose.model('Event', EventSchema);
+const Plan = module.exports = mongoose.model('Plan', PlanSchema);
 
 module.exports.create = (obj, callback) => {
-  Event.insertMany(obj, callback);
+  Plan.insertMany(obj, callback);
 }
 
-module.exports.remove = (EventId, callback) => {
-  Event.deleteOne({_id: EventId}, callback);
+module.exports.remove = (PlanId, callback) => {
+  Plan.deleteOne({_id: PlanId}, callback);
 }
 
-module.exports.update = (EventId, callback) => {
-  Event.findByIdAndUpdate({_id: EventId}, callback);
+module.exports.update = (PlanId, body, callback) => {
+  Plan.findByIdAndUpdate(PlanId, body, callback);
 }
 
 module.exports.show = (condition, callback) => {
-  Event.findById(condition, callback);
+  Plan.findById(condition, callback);
+}
+
+module.exports.index = (callbacl) => {
+  Plan.find(callback);
 }

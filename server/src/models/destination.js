@@ -14,6 +14,11 @@ const DestinationSchema = new Schema({
   },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  siteId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
   }
 })
 
@@ -33,4 +38,8 @@ module.exports.show = (condition, callback) => {
 
 module.exports.remove = (Destinationid, callback) => {
   Destination.deleteOne({_id: Destinationid}, callback);
+}
+
+module.exports.update = (Destinationid, body, callback) => {
+  Destination.findByIdAndUpdate(Destinationid, body, callback);
 }
