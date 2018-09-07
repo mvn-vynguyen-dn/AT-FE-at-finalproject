@@ -1,20 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-const article = require('./ArticleRoutes');
-const category = require('./CategoryRoutes');
-const comment = require('./CommentRoutes');
-const destination = require('./DestinationRoutes');
-const picture = require('./PictureRoutes');
-const plan = require('./PlanRoutes');
-const site = require('./SiteRoutes');
-const user = require('./UserRoutes');
+const articleRoute = require('./ArticleRoutes');
+const categoryRoute = require('./CategoryRoutes');
+const commentrRoute = require('./CommentRoutes');
+const destinationRoute = require('./DestinationRoutes');
+const pictureRoute = require('./PictureRoutes');
+const planRoute = require('./PlanRoutes');
+const siteRoute = require('./SiteRoutes');
+const userRoute = require('./UserRoutes');
 
-router.use('/articles', article);
-router.use('/categorys', category);
-router.use('/comments', comment);
-router.use('/destinations', destination);
-router.use('/pictures', picture);
-router.use('/plans', plan);
-router.use('/sites', site);
-router.use('/users', user);
+// router.use('/articles', articleRoute);
+// router.use('/categorys', categoryRoute);
+// router.use('/comments', commentrRoute);
+// router.use('/destinations', destinationRoute);
+// router.use('/pictures', pictureRoute);
+// router.use('/plans', planRoute);
+// router.use('/sites', siteRoute);
+// router.use('/users', userRoute);
+
+module.exports = router;
