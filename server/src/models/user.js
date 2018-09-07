@@ -12,7 +12,7 @@ const UserSchema = new Schema({
   age: {
     type: Number,
   },
-  hobie: {
+  hobbies: {
     type: String,
   },
   avatar: {
@@ -58,4 +58,8 @@ module.exports.update = (userId, callback) => {
 
 module.exports.show = (condition, callback) => {
   User.findById(condition, callback);
+}
+
+module.exports.index = (callback) => {
+  User.find(callback);
 }

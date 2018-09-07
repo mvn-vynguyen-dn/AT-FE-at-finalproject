@@ -28,3 +28,7 @@ module.exports.show = (condition, callback) => {
 module.exports.remove = (Categoryid, callback) => {
   Category.deleteOne({_id: Categoryid}, callback);
 }
+
+module.exports.update = (cateid, body, callback) => {
+  Category.findByIdAndUpdate(cateid, body, callback);
+}
