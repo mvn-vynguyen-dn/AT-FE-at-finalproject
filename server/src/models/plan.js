@@ -13,10 +13,6 @@ const PlanSchema = new Schema({
     type: Array,
     "default": [],
   },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
   timeline: {
     type: Array,
     "default": [],
