@@ -10,7 +10,7 @@ const planRoute = require('./PlanRoutes');
 const siteRoute = require('./SiteRoutes');
 const userRoute = require('./UserRoutes');
 
-// router.use('/articles', articleRoute);
+router.use('/articles', articleRoute);
 // router.use('/categorys', categoryRoute);
 // router.use('/comments', commentrRoute);
 // router.use('/destinations', destinationRoute);
