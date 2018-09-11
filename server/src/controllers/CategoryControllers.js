@@ -8,7 +8,9 @@ exports.index = (req, res, next) => {
 }
 
 exports.show = (req, res, next) =>  {
-  Category.show((err, callback) => {
+  const id = req.params.id;
+  const condition = {_id: id};
+  Category.show(condition,(err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });

@@ -8,7 +8,8 @@ exports.index = (req, res, next) => {
 }
 
 exports.show = (req, res, next) =>  {
-  Sites.show((err, callback) => {
+  const id = req.params.id;
+  Sites.show(id, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });
@@ -30,7 +31,8 @@ exports.create = (req, res, next) => {
       "description": item.description,
       "listPicture": item.listPicture,
       "backgroundImg": item.backgroundImg,
-      "district": item.district
+      "district": item.district,
+      "parentId": item.parentId
     });
   });
   Sites.insertMany(siteObj, (err, callback) => {
