@@ -20,6 +20,8 @@ const DestinationSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   }
+}, {
+  versionKey: false
 })
 
 const Destination = module.exports = mongoose.model('Destination', DestinationSchema);

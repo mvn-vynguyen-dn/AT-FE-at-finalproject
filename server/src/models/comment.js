@@ -24,6 +24,8 @@ const CommentSchema = new Schema({
     type: Array,
     "default": []
   }
+},{
+  versionKey: false
 })
 
 const Comment = module.exports = mongoose.model('Comment', CommentSchema);

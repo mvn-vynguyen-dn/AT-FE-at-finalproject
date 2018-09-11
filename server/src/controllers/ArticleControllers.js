@@ -26,10 +26,10 @@ exports.create = (req, res, next) => {
   var artObj = [];
   artObj = artArr.map(item => {
     return new Album({
-      "content" : item.content,
-      "title": item.title,
-      "destinationId": item.destinationid,
-      "siteId": item.siteId
+      content : item.content,
+      title: item.title,
+      destinationId: item.destinationid,
+      siteId: item.siteId
     });
   });
   Album.insertMany(artObj, (err, callback) => {

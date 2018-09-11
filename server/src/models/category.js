@@ -9,6 +9,9 @@ const CategorySchema = new Schema({
   description: {
     type: String,
   }
+},
+{
+  versionKey: false
 })
 
 const Category = module.exports = mongoose.model('Category', CategorySchema);

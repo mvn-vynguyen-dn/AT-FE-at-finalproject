@@ -13,10 +13,16 @@ const SiteSchema = new Schema({
   backgroundImg: {
     type: String
   },
-  district: {
+  district:{
     type: Array,
-    "default" : [],
+    "default": [],
+  },
+  parentId: {
+    type: mongoose.Schema.Types.ObjectId,
   }
+}, 
+{
+  versionKey: false
 })
 
 const Site = module.exports = mongoose.model('Site', SiteSchema);
@@ -29,8 +35,19 @@ module.exports.index = (callback) => {
   Site.find(callback);
 }
 
-module.exports.show = (condition, callback) => {
-  Site.findById(condition, callback);
+module.exports.show = (id, callback) => {
+  Site.aggregate([
+    // {
+    //   $match: {
+    //     "_id": mongoose.Types.ObjectId(id)
+    //   }
+    // },
+    {
+      $match: {
+        "parentId": mongoose.Types.ObjectId(id)
+      }
+    }
+  ], callback)
 }
 
 module.exports.remove = (Siteid, callback) => {

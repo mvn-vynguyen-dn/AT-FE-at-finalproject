@@ -26,11 +26,11 @@ exports.create = (req, res, next) => {
   var DestinationObj = [];
   DestinationObj = DestinationArr.map(item => {
     return new Destination({
-      "name":item.name,
-      "address": item.address,
-      "rating": item.rating,
-      "categoryId": item.categoryId,
-      "siteId": item.siteId,
+      name:item.name,
+      address: item.address,
+      rating: item.rating,
+      categoryId: item.categoryId,
+      siteId: item.siteId,
     });
   });
   Destination.insertMany(DestinationObj, (err, callback) => {

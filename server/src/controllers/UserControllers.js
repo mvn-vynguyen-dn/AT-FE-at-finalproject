@@ -26,16 +26,16 @@ exports.create = (req, res, next) => {
   var userObj = [];
   userObj = userArr.map(item => {
     return new Users({
-      "name":item.name,
-      "email": item.email,
-      "age": item.age,
-      "hobbies": item.hobbies,
-      "avatar": item.avatar,
-      "listPictures": item.listPictures,
-      "listFriends": item.listFriends,
-      "password": item.listFriends,
-      "username": item.username,
-      "role": item.role
+      name:item.name,
+      email: item.email,
+      age: item.age,
+      hobbies: item.hobbies,
+      avatar: item.avatar,
+      listPictures: item.listPictures,
+      listFriends: item.listFriends,
+      password: item.listFriends,
+      username: item.username,
+      role: item.role
     });
   });
   Users.insertMany(userObj, (err, callback) => {
