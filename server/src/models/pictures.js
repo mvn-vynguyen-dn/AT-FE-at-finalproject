@@ -10,6 +10,8 @@ const PictureSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true
   }
+},{
+  versionKey: false
 })
 
 const Picture = module.exports = mongoose.model('Picture', PictureSchema);

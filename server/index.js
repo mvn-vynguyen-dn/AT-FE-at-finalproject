@@ -4,7 +4,7 @@ const app = require('./src/lib/Express');
 require('dotenv').config();
 mongoose.Promise = global.Promise;
 
-mongoose.connect(`${process.env.DB_HOST}${process.env.DB_NAME}`)
+mongoose.connect(process.env.DB_HOST + process.env.DB_NAME)
   .then(() => {
   console.log("Sucsess connected database");
 }).catch(err =>{

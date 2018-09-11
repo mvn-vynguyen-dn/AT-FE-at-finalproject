@@ -17,6 +17,8 @@ const ArticleSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   }
+},{
+  versionKey: false
 })
 
 const Article = module.exports = mongoose.model('Article', ArticleSchema);

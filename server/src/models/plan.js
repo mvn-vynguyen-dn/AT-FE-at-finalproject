@@ -39,6 +39,6 @@ module.exports.show = (condition, callback) => {
   Plan.findById(condition, callback);
 }
 
-module.exports.index = (callbacl) => {
+module.exports.index = (callback) => {
   Plan.find(callback);
 }
