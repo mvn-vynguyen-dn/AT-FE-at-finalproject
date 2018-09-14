@@ -1,9 +1,32 @@
 const Category = require('../models/category');
 
+const category = [
+  {
+    "id": "1",
+    "name": "vacation",
+    "description": "This is activities related to vaction"
+  },
+  {
+    "id": "2",
+    "name": "food",
+    "description": "This is activities related to food"
+  },
+  {
+    "id": "3",
+    "name": "shopping",
+    "description": "This is activities related to shopping"
+  },
+  {
+    "id": "4",
+    "name": "sight-seeing",
+    "description": "This is activities related to sight-seeing"
+  }
+]
+
 exports.index = (req, res, next) => {
   Category.index((err, callback) => {
     if (err) throw err;
-    res.status(200).json(callback);
+    res.status(200).json(category);
   })
 }
 
@@ -28,8 +51,8 @@ exports.create = (req, res, next) => {
   var cateObj = [];
   cateObj = cateArr.map(item => {
     return new Category({
-      "name" : item.name,
-      "description": item.description,
+      name : item.name,
+      description: item.description,
     });
   });
   Category.insertMany(cateObj, (err, callback) => {

@@ -26,12 +26,12 @@ exports.create = (req, res, next) => {
   var CommentObj = [];
   CommentObj = CommentArr.map(item => {
     return new Comment({
-      "content":item.content,
-      "listComment": item.listComment,
-      "time": item.time,
-      "planId": item.planId,
-      "userId": item.userId,
-      "pictures": item.pictures
+      content:item.content,
+      listComment: item.listComment,
+      time: item.time,
+      planId: item.planId,
+      userId: item.userId,
+      pictures: item.pictures
     });
   });
   Comment.insertMany(CommentObj, (err, callback) => {

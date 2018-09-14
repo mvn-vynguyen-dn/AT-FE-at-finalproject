@@ -26,8 +26,8 @@ exports.create = (req, res, next) => {
   var picObj = [];
   picObj = picArr.map(item => {
     return new Pictures({
-      "planId": item.planId,
-      "destinationId": item.destinationId,
+      planId: item.planId,
+      destinationId: item.destinationId,
     });
   });
   Pictures.insertMany(picObj, (err, callback) => {

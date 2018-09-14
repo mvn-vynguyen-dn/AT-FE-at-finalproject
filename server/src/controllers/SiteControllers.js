@@ -1,9 +1,27 @@
 const Sites = require('../models/sites');
 
+const sites = [
+  {
+    "_id": "1",
+    "name": "da nang",
+    "description": "da nang mong mo ",
+  },
+  {
+    "_id": "2",
+    "name": "hue",
+    "description": "hue is the best"
+  },
+  {
+    "_id": "3",
+    "name": "Thanh Khe",
+    "description": "1 dia diem cua da nang",
+  }
+]
+
 exports.index = (req, res, next) => {
   Sites.index((err, callback) => {
     if (err) throw err;
-    res.status(200).json(callback);
+    res.status(200).json(sites);
   })
 }
 
@@ -27,12 +45,12 @@ exports.create = (req, res, next) => {
   var siteObj = [];
   siteObj = siteArr.map(item => {
     return new Sites({
-      "name" : item.name,
-      "description": item.description,
-      "listPicture": item.listPicture,
-      "backgroundImg": item.backgroundImg,
-      "district": item.district,
-      "parentId": item.parentId
+      name : item.name,
+      description: item.description,
+      listPicture: item.listPicture,
+      backgroundImg: item.backgroundImg,
+      district: item.district,
+      parentId: item.parentId
     });
   });
   Sites.insertMany(siteObj, (err, callback) => {

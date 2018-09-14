@@ -26,10 +26,10 @@ exports.create = (req, res, next) => {
   var planObj = [];
   planObj = planArr.map(item => {
     return new Plan({
-      "datetime":item.datetime,
-      "userId": item.userId,
-      "peoples": item.peoples,
-      "timeline": item.timeline,
+      datetime:item.datetime,
+      userId: item.userId,
+      peoples: item.peoples,
+      timeline: item.timeline,
     });
   });
   Plan.insertMany(planObj, (err, callback) => {
