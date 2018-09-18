@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt');
+const secret = process.env.JWT_KEY;
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new Schema({
   name: {
@@ -44,8 +47,39 @@ const UserSchema = new Schema({
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
+UserSchema.methods.generateJWT = function() {
+  var today = new Date();
+  var exp = new Date(today);
+  exp.setDate(today.getDate() + 1);
+  return jwt.sign({
+    id: this._id,
+    username: this.username,
+    exp: parseInt(exp.getTime()/1000)
+  }, secret)
+};
+
+UserSchema.methods.toAuthJSON = function() {
+  return {
+    username: this.username,
+    email: this.email,
+    image: this.image,
+    token: this.generateJWT()
+  };
+};
+
+module.exports.hashPassword = (password, callback) => {
+  bcrypt.hash(password, 10, callback);
+}
+
+module.exports.comparePassword = (password, hash, callback) => {
+  bcrypt.compare(password, hash, callback);
+}
+
 module.exports.create = (obj, callback) => {
   User.insertMany(obj, callback);
+  User.save().then(function(){
+  return res.json({user: user.toAuthJSON()});
+  }).catch(next);
 }
 
 module.exports.remove = (userId, callback) => {
