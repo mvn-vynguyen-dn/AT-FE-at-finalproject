@@ -3,50 +3,23 @@ const Destination = require('../models/destination');
 const destination = [
   {
     "_id" : "1",
-    "name": "quan Tau Khua",
-    "address": "Quang Trung",
-    "rating": 5,
-    "categoryId" : "1",
-    "siteId" : [
-      "1", "2", "3"
+    "name": "Bánh Xèo Bà Dưỡng",
+    "address": "280/23 Hoàng Diệu",
+    "rating": 100,
+    "categoryId": "5b9c5847b16a2d3504ff0cfb",
+    "siteId": ["5b9d0574006c771874703fe5", "5b9d484a89641af910f67f5d", "5b9d567889641af910f67f5e"],
+    "listPicture": [
+      'http://dathanhtravel.vn/data/news/default/banh-xeo-ba-duong-mon-ngon-da-nang.jpg',
+      'https://images.foody.vn/res/g1/6081/prof/s576x330/foody-mobile-foody-banh-xeo-ba-du-315-635739618189627907.jpg',
+      'https://diadiem.danang.gov.vn/Portals/0/Photo/5584_20131105093234_Banh%20Xeo%20Ba%20Duong.jpg'
     ]
   },
-  {
-    "_id" : "2",
-    "name": "quan Nhat Ban",
-    "address": "Tokyo",
-    "rating": 3,
-    "categoryId" : "2",
-    "siteId" : [
-      "1", "3"
-    ]
-  },
-  {
-    "_id" : "3",
-    "name": "quan Han Quac",
-    "address": "Seoul",
-    "rating": 3,
-    "categoryId" : "3",
-    "siteId" : [
-      "3"
-    ]
-  },
-  {
-    "_id" : "4",
-    "name": "quan Viet",
-    "address": "Tokyo",
-    "rating": 3,
-    "categoryId" : "4",
-    "siteId" : [
-      "2"
-    ]
-  }
 ]
 
 exports.index = (req, res, next) => {
   Destination.index((err, callback) => {
     if (err) throw err;
-    res.status(200).json(destination);
+    res.status(200).json(callback);
   })
 }
 

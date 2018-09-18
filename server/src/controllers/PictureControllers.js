@@ -23,14 +23,15 @@ exports.remove = (req, res, next) => {
 
 exports.create = (req, res, next) => {
   const picArr = req.body;
-  var picObj = [];
-  picObj = picArr.map(item => {
+  const listObj = req.files.map(item => {
     return new Pictures({
-      planId: item.planId,
-      destinationId: item.destinationId,
+      planId: picArr.planId,
+      destinationId: picArr.destinationId,
+      name: item.filename,
     });
   });
-  Pictures.insertMany(picObj, (err, callback) => {
+
+  Pictures.insertMany(listObj, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });

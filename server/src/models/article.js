@@ -11,11 +11,15 @@ const ArticleSchema = new Schema({
   },
   destinationId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
   },
   siteId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
+  },
+  time: {
+    type: String,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
   }
 },{
   versionKey: false
