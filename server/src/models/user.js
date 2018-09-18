@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
@@ -30,7 +32,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  username: {
+  userName: {
     type: String,
     required: true,
   },
@@ -44,8 +46,8 @@ const UserSchema = new Schema({
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
-module.exports.create = (obj, callback) => {
-  User.insertMany(obj, callback);
+module.exports.create = (user, callback) => {
+  user.save(callback);
 }
 
 module.exports.remove = (userId, callback) => {
@@ -57,9 +59,13 @@ module.exports.update = (userId, callback) => {
 }
 
 module.exports.show = (condition, callback) => {
-  User.findById(condition, callback);
+  User.find(condition, callback);
 }
 
 module.exports.index = (callback) => {
   User.find(callback);
+}
+
+module.exports.hashPassword = (password, callback) => {
+  bcrypt.hash(password, 10, callback);
 }

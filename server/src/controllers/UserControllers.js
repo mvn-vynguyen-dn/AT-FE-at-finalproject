@@ -22,26 +22,45 @@ exports.remove = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
-  const userArr = req.body;
-  var userObj = [];
-  userObj = userArr.map(item => {
-    return new Users({
-      name:item.name,
-      email: item.email,
-      age: item.age,
-      hobbies: item.hobbies,
-      avatar: item.avatar,
-      listPictures: item.listPictures,
-      listFriends: item.listFriends,
-      password: item.listFriends,
-      username: item.username,
-      role: item.role
+  const user = req.body;
+  const password = req.body.password;
+  const userName = req.body.userName;
+  const conditon = { userName: userName }
+  
+  console.log(userName);
+  Users.show(conditon, (err, callback) => {
+    if (err) throw err;
+    if(callback.length) {
+      return res.status(409).json({
+        error: 'user name alrealy exist'
+      })
+    }
+    Users.hashPassword(password, (err, hash) => {
+      if (err) {
+        return res.status(500).json({
+          error: err
+        });
+      } else {
+        const userObj = new Users({
+          name: user.name,
+          email: user.email,
+          age: user.age,
+          hobbies: user.hobbies,
+          avatar: req.files[0].filename,
+          listPictures: user.listPictures,
+          listFriends: user.listFriends,
+          password: hash,
+          userName: userName,
+          role: user.role
+        });
+       
+        Users.create(userObj, (err, callback) => {
+          if(err) throw err;
+          res.status(200).send(callback);
+        });
+      }
     });
-  });
-  Users.insertMany(userObj, (err, callback) => {
-    if(err) throw err;
-    res.status(200).send(callback);
-  });
+  })
 }
 
 exports.update = (req, res, next) => {

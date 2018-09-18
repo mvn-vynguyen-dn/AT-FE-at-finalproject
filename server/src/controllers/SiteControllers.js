@@ -1,31 +1,13 @@
 const Sites = require('../models/sites');
 
-const sites = [
-  {
-    "_id": "1",
-    "name": "da nang",
-    "description": "da nang mong mo ",
-  },
-  {
-    "_id": "2",
-    "name": "hue",
-    "description": "hue is the best"
-  },
-  {
-    "_id": "3",
-    "name": "Thanh Khe",
-    "description": "1 dia diem cua da nang",
-  }
-]
-
 exports.index = (req, res, next) => {
   Sites.index((err, callback) => {
     if (err) throw err;
-    res.status(200).json(sites);
+    res.status(200).json(callback);
   })
 }
 
-exports.show = (req, res, next) =>  {
+exports.show = (req, res, next) => {
   const id = req.params.id;
   Sites.show(id, (err, callback) => {
     if(err) throw err;
@@ -41,18 +23,26 @@ exports.remove = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
-  const siteArr = req.body;
-  var siteObj = [];
-  siteObj = siteArr.map(item => {
-    return new Sites({
-      name : item.name,
-      description: item.description,
-      listPicture: item.listPicture,
-      backgroundImg: item.backgroundImg,
-      district: item.district,
-      parentId: item.parentId
+  const siteRes = req.body;
+  const backgroundImg = '';
+  
+  const listPicture = req.files.map(item => {
+    if (item.fieldname === 'listPicture') {
+      return item.filename;
+    } else {
+      backgroundImg = item.filename;
+    }
+  }).filter(fileName => fileName)
+
+  const siteObj = new Sites({
+      name : siteRes.name,
+      description: siteRes.description,
+      listPicture: listPicture,
+      backgroundImg: backgroundImg,
+      parentId: siteRes.parentId,
+      articleSite: siteRes.articleSite
     });
-  });
+
   Sites.insertMany(siteObj, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);

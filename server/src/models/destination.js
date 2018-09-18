@@ -17,8 +17,15 @@ const DestinationSchema = new Schema({
     required: true
   },
   siteId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Array,
     required: true,
+    "default": [
+      {
+        id: {
+          type: mongoose.Schema.Types.ObjectId,
+        }
+      }
+    ],
   }
 }, {
   versionKey: false
@@ -27,11 +34,31 @@ const DestinationSchema = new Schema({
 const Destination = module.exports = mongoose.model('Destination', DestinationSchema);
 
 module.exports.create = (Destination, callback) => {
-  Destination.save(callback);
+  Destination.insertMany(callback);
 }
 
 module.exports.index = (callback) => {
-  Destination.find(callback);
+  Destination.aggregate(
+    [
+      {
+        $lookup: 
+        {
+          from: 'pictures',
+          localField: '_id',
+          foreignField: 'destinationId',
+          as: 'listPictures'
+        }
+      },
+      {
+        $lookup: 
+        {
+          from: 'categories',
+          localField: 'categoryId',
+          foreignField: '_id',
+          as: 'categorys'
+        }
+      }
+    ], callback)
 }
 
 module.exports.show = (condition, callback) => {

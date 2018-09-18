@@ -4,13 +4,16 @@ const Schema = mongoose.Schema;
 const PictureSchema = new Schema({
   planId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
   },
   destinationId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+  },
+  name: {
+    type: String,
+    require: true,
   }
-},{
+},
+{
   versionKey: false
 })
 
