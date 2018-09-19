@@ -22,10 +22,9 @@ exports.login = (req, res, next) => {
         }
         Users.comparePassword(password, user[0].password, (err, callback) => {
           if (callback) {
-            console.log(user[0].token);
             const token = jwt.sign({ username: user.userName, password: user.password}, 'RESTFULAPIs');
-            user[0].token.push(token);
-            console.log(user[0].token);
+            const id = user[0]._id;
+            Users.updateField(id, token);
             return res.json(
               {
                 token: token

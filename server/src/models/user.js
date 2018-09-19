@@ -91,8 +91,8 @@ module.exports.remove = (userId, callback) => {
   User.deleteOne({_id: userId}, callback);
 }
 
-module.exports.update = (userId, callback) => {
-  User.findByIdAndUpdate({_id: userId}, callback);
+module.exports.update = (userId, body, callback) => {
+  User.findByIdAndUpdate(userId, body, callback);
 }
 
 module.exports.show = (condition, callback) => {
@@ -101,4 +101,16 @@ module.exports.show = (condition, callback) => {
 
 module.exports.index = (callback) => {
   User.find(callback);
+}
+
+module.exports.updateField = (id, body, callback) => {
+  User.findByIdAndUpdate(
+    { _id: id},
+    { $push: {
+      token: {
+        $each: [body],
+        $position: 1
+      }
+    }}
+  , callback)
 }
