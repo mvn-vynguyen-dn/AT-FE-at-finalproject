@@ -12,6 +12,7 @@ exports.login = (req, res, next) => {
   const conditon = {
     userName: req.body.userName
   }
+  console.log(conditon);
   const password = req.body.password;
   Users.show(conditon, (err, user) => {
     if (err) throw err;
@@ -20,17 +21,28 @@ exports.login = (req, res, next) => {
         if (err) {
           return res.status(500).json({ error: err })
         }
-        Users.comparePassword(password, hash, (err, callback) => {
+        Users.comparePassword(password, user[0].password, (err, callback) => {
           if (callback) {
+            const token = jwt.sign({ username: user.userName, password: user.password}, 'RESTFULAPIs');
+            console.log(user);
             return res.json(
               {
-                token: jwt.sign({ username: user.userName, password: user.password}, 'RESTFULAPIs')
+                token: token
               }
             );
+          } else {
+            res.status(404).json(
+              { error: 'Password or username are wrong' }
+            );
           }
-        })
+      })
     });
-  };
+  } 
+    else {
+      res.status(404).json(
+        { error: 'Password or username are wrong' }
+      );
+      };
   })
 }
 
@@ -57,7 +69,6 @@ exports.create = (req, res, next) => {
   Users.show(conditon, (err, callback) => {
     if (err) throw err;
     if(callback.length) {
-      //console.log(callback);
       return res.status(409).json({
         error: 'user name alrealy exist'
       })

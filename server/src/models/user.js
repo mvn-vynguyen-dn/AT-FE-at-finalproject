@@ -42,6 +42,7 @@ const UserSchema = new Schema({
   },
   token: {
     type: Array,
+    "default": [],
   }
 }, {
   versionKey: false,
