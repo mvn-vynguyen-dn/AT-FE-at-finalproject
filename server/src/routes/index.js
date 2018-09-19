@@ -10,6 +10,7 @@ const planRoute = require('./PlanRoutes');
 const siteRoute = require('./SiteRoutes');
 const userRoute = require('./UserRoutes');
 const loginRoute = require('./LoginRoutes');
+const forgotPassword = require('./ForgotRoutes');
 
 router.use('/articles', articleRoute);
 router.use('/categorys', categoryRoute);
@@ -20,4 +21,6 @@ router.use('/plans', planRoute);
 router.use('/sites', siteRoute);
 router.use('/users', userRoute);
 router.use('/login', loginRoute);
+router.use('/forgot', forgotPassword);
+
 module.exports = router;
