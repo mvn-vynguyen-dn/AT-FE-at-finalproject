@@ -15,7 +15,7 @@ exports.login = (req, res, next) => {
   const password = req.body.password;
   Users.show(conditon, (err, user) => {
     if (err) throw err;
-    if(user) {
+    if(user.length) {
       Users.hashPassword(password, (err, hash) => {
         if (err) {
           return res.status(500).json({ error: err })
@@ -47,7 +47,7 @@ exports.login = (req, res, next) => {
 }
 
 exports.show = (req, res, next) => {
-  Users.show( (err, callback) => {
+  Users.show((err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });
@@ -98,7 +98,6 @@ exports.create = (req, res, next) => {
     });
   })
 }
-
 
 exports.update = (req, res, next) => {
   const id = req.params.id;

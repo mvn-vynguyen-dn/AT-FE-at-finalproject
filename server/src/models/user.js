@@ -81,9 +81,6 @@ module.exports.comparePassword = (password, hash, callback) => {
 
 module.exports.create = (obj, callback) => {
   User.insertMany(obj, callback);
-  // User.save().then(function(){
-  // return res.json({user: user.toAuthJSON()});
-  // }).catch(next);
 }
 
 
