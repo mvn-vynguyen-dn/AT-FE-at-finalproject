@@ -38,25 +38,33 @@ const validPassword = Joi.extend((joi) => ({
 module.exports = {
   request: {
     body: {
-      names: Joi.string().options({
+      name: Joi.string().alphanum().min(3).max(25).required().options({
         language: {
           string: {
-            base: 'must be a string'
+            base: 'must be a string',
+            alphanum: 'must only contain alpha-numeric characters',
+            min: 'must be large than or equal to {{limit}}',
+            max: 'must be less than or equal to {{limit}}'
           }
         }
       }),
-      ages: Joi.number().min(18).max(25).required().options({
+      userName: Joi.string().min(5).max(20).required().options({
         language: {
-          number: {
-            base: 'must be a number',
+          string: {
+            base: 'must be a string',
             min: 'must be larger than or equal to {{limit}}',
             max: 'must be less than or equal to {{limit}}'
           }
         }
       }),
-      passwords: validPassword.string().validPassword(),
-      userNames: Joi.string().alphanum().min(3).max(30).required(),
-      levels: Joi.number().min(3).max(30).required()
+      role: Joi.number().required().options({
+        language: {
+          number: {
+            base: 'must be a number',
+          }
+        }
+      }),
+      password: validPassword.string().validPassword(),
     }
   }
 };
