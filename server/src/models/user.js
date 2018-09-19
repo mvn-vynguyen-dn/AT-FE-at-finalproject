@@ -31,15 +31,17 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
   },
-  username: {
+  userName: {
     type: String,
     required: true,
   },
   role: {
     type: Number,
     required: true,
+  },
+  token: {
+    type: Array,
   }
 }, {
   versionKey: false,
@@ -47,7 +49,7 @@ const UserSchema = new Schema({
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
-UserSchema.methods.generateJWT = function() {
+UserSchema.methods.generateJWT = () => {
   var today = new Date();
   var exp = new Date(today);
   exp.setDate(today.getDate() + 1);
@@ -58,7 +60,7 @@ UserSchema.methods.generateJWT = function() {
   }, secret)
 };
 
-UserSchema.methods.toAuthJSON = function() {
+UserSchema.methods.toAuthJSON = () => {
   return {
     username: this.username,
     email: this.email,
@@ -82,6 +84,7 @@ module.exports.create = (obj, callback) => {
   }).catch(next);
 }
 
+
 module.exports.remove = (userId, callback) => {
   User.deleteOne({_id: userId}, callback);
 }
@@ -91,7 +94,7 @@ module.exports.update = (userId, callback) => {
 }
 
 module.exports.show = (condition, callback) => {
-  User.findById(condition, callback);
+  User.find(condition, callback);
 }
 
 module.exports.index = (callback) => {
