@@ -10,7 +10,7 @@ const validPassword = Joi.extend((joi) => ({
     {
       name: 'validPassword',
       validate(params, value, state, options) {
-        const userName = state.parent.userNames;
+        const userName = state.parent.userName;
         let sumLetter = '';
         let isValid = true;
 
@@ -64,7 +64,15 @@ module.exports = {
           }
         }
       }),
-      password: validPassword.string().validPassword(),
+      password: validPassword.string().min(8).max(20).validPassword().options({
+        language: {
+          string: {
+            base: 'must be a string',
+            min: 'must be larger than or equal to {{limit}}',
+            max: 'must be less than or equal to {{limit}}'
+          }
+        }
+      }),
     }
   }
 };
