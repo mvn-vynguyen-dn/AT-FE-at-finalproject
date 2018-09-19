@@ -12,7 +12,6 @@ exports.login = (req, res, next) => {
   const conditon = {
     userName: req.body.userName
   }
-  console.log(conditon);
   const password = req.body.password;
   Users.show(conditon, (err, user) => {
     if (err) throw err;
@@ -23,8 +22,10 @@ exports.login = (req, res, next) => {
         }
         Users.comparePassword(password, user[0].password, (err, callback) => {
           if (callback) {
+            console.log(user[0].token);
             const token = jwt.sign({ username: user.userName, password: user.password}, 'RESTFULAPIs');
-            console.log(user);
+            user[0].token.push(token);
+            console.log(user[0].token);
             return res.json(
               {
                 token: token
