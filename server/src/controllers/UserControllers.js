@@ -54,10 +54,10 @@ exports.create = (req, res, next) => {
   const userName = req.body.userName;
   const conditon = { userName: userName }
   
-  console.log(userName);
   Users.show(conditon, (err, callback) => {
     if (err) throw err;
     if(callback.length) {
+      //console.log(callback);
       return res.status(409).json({
         error: 'user name alrealy exist'
       })
