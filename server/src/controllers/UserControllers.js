@@ -26,7 +26,7 @@ exports.login = (req, res, next) => {
         }
         Users.comparePassword(password, user[0].password, (err, callback) => {
           if (callback) {
-            const token = jwt.sign({ username: user.userName, password: user.password}, 'RESTFULAPIs');
+            const token = jwt.sign({ username: user.userName, password: user.password}, process.env.JWT_KEY, { expiresIn: 86400 });
             const id = user[0]._id;
             Users.updateField(id, token);
             return res.json(
@@ -136,6 +136,7 @@ exports.forgot = (req, res, next) => {
   async.waterfall([
     (done) => {
       Users.findOne({
+        userName: req.body.userName,
         email: req.body.email
       }).exec((err, user) => {
         if (user) {
