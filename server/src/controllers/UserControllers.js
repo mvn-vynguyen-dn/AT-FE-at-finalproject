@@ -1,5 +1,9 @@
 const Users = require('../models/user');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const async = require('async');
+const passport = require('passport');
+const crypto = require('crypto');
 
 exports.index = (req, res, next) => {
   Users.index((err, callback) => {
@@ -115,3 +119,140 @@ exports.delete = (req, res, next) => {
     res.status(200).send(callback);
   });
 }
+
+
+// exports.forgot = (req, res, next) => {
+//   var transporter =  nodemailer.createTransport({
+//     service: 'Gmail',
+//     auth: {
+//       user: email,
+//       pass: password
+//     },
+//     tls: {
+//       rejectUnauthorized: true
+//     }
+//   });
+//   var mainOptions = {
+//     from: 'ShacoJJ',
+//     to: 'nguyenvanvyshaco@gmail.com',
+//     subject: 'Test Nodemailer',
+//     text: 'You recieved message from ' + req.body.email,
+//     html: '<p>You have got a new message</b><ul><li>Username:' + req.body.name + '</li><li>Email:' + req.body.email + '</li><li>Username:' + req.body.message + '</li></ul>'
+//   }
+//   transporter.sendMail(mainOptions, function(err, info){
+//     if (err) {
+//       console.log(err);
+//       res.redirect('/');
+//     } else {
+//       console.log('Message sent: ' +  info.response);
+//       res.redirect('/');
+//     }
+//   });
+// };
+
+exports.forgot = (req, res, next) => {
+  const email = process.env.SENDGRID_USER;
+  const password = process.env.SENDGRID_PASSWORD;
+  var transporter =  nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: email,
+      pass: password
+    },
+    tls: {
+      rejectUnauthorized: true
+    }
+  });
+  async.waterfall([
+    (done) => {
+      Users.findOne({
+        email: req.body.email
+      }).exec((err, user) => {
+        if (user) {
+          done(err, user);
+        } else {
+          done('User not found.');
+        }
+      });
+    },
+    (user, done) => {
+      crypto.randomBytes(20, function(err, buffer) {
+        var token = buffer.toString('hex');
+        done(err, user, token);
+      });
+    },
+    (user, token, done) => {
+      Users.findByIdAndUpdate({ _id: user._id }, { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, { upsert: true, new: true }).exec(function(err, new_user) {
+        done(err, token, new_user);
+      });
+    },
+    (token, user, done) => {
+      var data = {
+        to: user.email,
+        from: email,
+        subject: 'Password help has arrived!',
+        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+        'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+        'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+      };
+      transporter.sendMail(data, (err) => {
+        if (!err) {
+          return res.json({ message: 'Kindly check your email for further instructions' });
+        } else {
+          return done(err);
+        }
+      });
+    }
+  ], (err) => {
+    return res.status(422).json({ message: err });
+  });
+};
+
+exports.reset = (req, res, next) => {
+  Users.findOne({
+    resetPasswordToken: req.body.token,
+    resetPasswordExpires: {
+      $gt: Date.now()
+    }
+  }).exec((err, user) => {
+    if (!err && user) {
+      if (req.body.newPassword === req.body.verifyPassword) {
+        user.password = Users.hashPassword(req.body.newPassword, callback);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        user.save((err) => {
+          if (err) {
+            return res.status(422).send({
+              message: err
+            });
+          } else {
+            var data = {
+              to: user.email,
+              from: email,
+              subject: 'Password Reset Confirmation',
+              context: {
+                name: user.fullName.split(' ')[0]
+              }
+            };
+            smtpTransport.sendMail(data, (err) => {
+              if (!err) {
+                return res.json({ message: 'Password reset' });
+              } else {
+                return done(err);
+              }
+            });
+          }
+        });
+      } else {
+        return res.status(422).send({
+          message: 'Passwords do not match'
+        });
+      }
+    } else {
+      return res.status(400).send({
+        message: 'Password reset token is invalid or has expired.'
+      });
+    }
+  });
+};

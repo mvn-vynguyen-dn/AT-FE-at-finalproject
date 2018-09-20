@@ -11,6 +11,7 @@ const siteRoute = require('./SiteRoutes');
 const userRoute = require('./UserRoutes');
 const loginRoute = require('./LoginRoutes');
 const forgotPassword = require('./ForgotRoutes');
+const resetPassword = require('./ResetRoutes');
 
 router.use('/articles', articleRoute);
 router.use('/categorys', categoryRoute);
@@ -22,5 +23,6 @@ router.use('/sites', siteRoute);
 router.use('/users', userRoute);
 router.use('/login', loginRoute);
 router.use('/forgot', forgotPassword);
+router.use('/reset', resetPassword);
 
 module.exports = router;
