@@ -164,7 +164,7 @@ exports.forgot = (req, res, next) => {
         subject: 'Password help has arrived!',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+        'http://' + req.headers.host + '/auth/reset/' + token + '\n\n' +
         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       transporter.sendMail(data, (err) => {
@@ -201,7 +201,6 @@ exports.reset = (req, res, next) => {
     }
   }).exec((err, user) => {
     if (!err && user) {
-      console.log(user.password);
       if (req.body.newPassword === req.body.verifyPassword) {
         user.password = bcrypt.hashSync(req.body.newPassword, 10);
         user.resetPasswordToken = undefined;
@@ -217,7 +216,7 @@ exports.reset = (req, res, next) => {
               from: email,
               subject: 'Password Reset Confirmation',
               text: 'Hello,\n\n' +
-              'This is a confirmation that the password for your account in LoveTravel' + user.email + ' has just been changed.\n'
+              'This is a confirmation that the password for your account in LoveTravel ' + user.email + ' has just been changed.\n'
             };
             transporter.sendMail(data, (err) => {
               if (!err) {
