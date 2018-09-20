@@ -5,18 +5,11 @@ const app = express();
 const HttpStatus = require('http-status');
 const validate = require('express-validation');
 const APIError = require('./APIError');
-const session = require('express-session');
-// const nodemailer = require('nodemailer');
 const passport = require('passport');
-// const LocalStrategy = require('passport-local').Strategy;
-// const async = require('async');
-// const crypto = require('crypto');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(session({ secret: 'session secret key' }));
-app.use(passport.initialize());
-app.use(passport.session());
+
 app.use('/uploads', express.static('uploads'));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

@@ -2,8 +2,8 @@ const Users = require('../models/user');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const async = require('async');
-const passport = require('passport');
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 exports.index = (req, res, next) => {
   Users.index((err, callback) => {
@@ -120,36 +120,6 @@ exports.delete = (req, res, next) => {
   });
 }
 
-
-// exports.forgot = (req, res, next) => {
-//   var transporter =  nodemailer.createTransport({
-//     service: 'Gmail',
-//     auth: {
-//       user: email,
-//       pass: password
-//     },
-//     tls: {
-//       rejectUnauthorized: true
-//     }
-//   });
-//   var mainOptions = {
-//     from: 'ShacoJJ',
-//     to: 'nguyenvanvyshaco@gmail.com',
-//     subject: 'Test Nodemailer',
-//     text: 'You recieved message from ' + req.body.email,
-//     html: '<p>You have got a new message</b><ul><li>Username:' + req.body.name + '</li><li>Email:' + req.body.email + '</li><li>Username:' + req.body.message + '</li></ul>'
-//   }
-//   transporter.sendMail(mainOptions, function(err, info){
-//     if (err) {
-//       console.log(err);
-//       res.redirect('/');
-//     } else {
-//       console.log('Message sent: ' +  info.response);
-//       res.redirect('/');
-//     }
-//   });
-// };
-
 exports.forgot = (req, res, next) => {
   const email = process.env.SENDGRID_USER;
   const password = process.env.SENDGRID_PASSWORD;
@@ -210,15 +180,29 @@ exports.forgot = (req, res, next) => {
 };
 
 exports.reset = (req, res, next) => {
+  const email = process.env.SENDGRID_USER;
+  const password = process.env.SENDGRID_PASSWORD;
+  var transporter =  nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: email,
+      pass: password
+    },
+    tls: {
+      rejectUnauthorized: true
+    }
+  });
+
   Users.findOne({
-    resetPasswordToken: req.body.token,
+    resetPasswordToken: req.params.token,
     resetPasswordExpires: {
       $gt: Date.now()
     }
   }).exec((err, user) => {
     if (!err && user) {
+      console.log(user.password);
       if (req.body.newPassword === req.body.verifyPassword) {
-        user.password = Users.hashPassword(req.body.newPassword, callback);
+        user.password = bcrypt.hashSync(req.body.newPassword, 10);
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
         user.save((err) => {
@@ -231,11 +215,10 @@ exports.reset = (req, res, next) => {
               to: user.email,
               from: email,
               subject: 'Password Reset Confirmation',
-              context: {
-                name: user.fullName.split(' ')[0]
-              }
+              text: 'Hello,\n\n' +
+              'This is a confirmation that the password for your account in LoveTravel' + user.email + ' has just been changed.\n'
             };
-            smtpTransport.sendMail(data, (err) => {
+            transporter.sendMail(data, (err) => {
               if (!err) {
                 return res.json({ message: 'Password reset' });
               } else {
