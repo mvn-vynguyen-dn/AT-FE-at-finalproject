@@ -115,5 +115,5 @@ module.exports.updateField = (id, body, callback) => {
         $position: 1
       }
     }}
-  , callback)
+  , callback);
 }

@@ -26,9 +26,15 @@ exports.login = (req, res, next) => {
         }
         Users.comparePassword(password, user[0].password, (err, callback) => {
           if (callback) {
-            const token = jwt.sign({ username: user.userName, password: user.password}, process.env.JWT_KEY, { expiresIn: 86400 });
+            const token = jwt.sign(
+              {id: user[0]._id, userName: user[0].userName},
+              process.env.JWT_KEY, 
+              { expiresIn: 86400 }
+            );
             const id = user[0]._id;
-            Users.updateField(id, token);
+            Users.updateField(id, token, (err, callback) => {
+              console.log(callback);
+            });
             return res.json(
               {
                 token: token
@@ -136,13 +142,12 @@ exports.forgot = (req, res, next) => {
   async.waterfall([
     (done) => {
       Users.findOne({
-        userName: req.body.userName,
         email: req.body.email
       }).exec((err, user) => {
         if (user) {
           done(err, user);
         } else {
-          done('User not found.');
+          done('Server have not this email. Please try again with another email');
         }
       });
     },
@@ -164,7 +169,7 @@ exports.forgot = (req, res, next) => {
         subject: 'Password help has arrived!',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        'http://' + req.headers.host + '/auth/reset/' + token + '\n\n' +
+        'http://localhost:4200/auth/reset/' + token + '\n\n' +
         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       transporter.sendMail(data, (err) => {
@@ -237,5 +242,17 @@ exports.reset = (req, res, next) => {
         message: 'Password reset token is invalid or has expired.'
       });
     }
+  });
+};
+
+exports.showMe = (req, res, next) => {
+  Users.findById(req.userId, { password: 0 }, (err, user) => {
+    if (err) {
+      return res.status(500).send("There was a problem finding the user.");
+    }
+    if (!user) {
+      return res.status(404).send("No user found.");
+    }
+    res.status(200).send(user);
   });
 };
