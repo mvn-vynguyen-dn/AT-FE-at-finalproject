@@ -3,8 +3,10 @@ let router = express.Router();
 
 let user = require('../controllers/UserControllers');
 var multer = require('multer');
-
+const Validation = require('../lib/Validation');
+const Validate = require('express-validation');
 const folderName = 'uploads';
+
 var storage = multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, `./${folderName}/`);
@@ -30,7 +32,7 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-router.post('/', user.create);
+router.post('/',Validate(Validation.request), user.create);
 router.get('/', user.index);
 router.get('/:id', user.show);
 router.put('/:id',upload.array('avatar'), user.update);
