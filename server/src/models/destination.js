@@ -17,15 +17,8 @@ const DestinationSchema = new Schema({
     required: true
   },
   siteId: {
-    type: Array,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
-    "default": [
-      {
-        id: {
-          type: mongoose.Schema.Types.ObjectId,
-        }
-      }
-    ],
   }
 }, {
   versionKey: false

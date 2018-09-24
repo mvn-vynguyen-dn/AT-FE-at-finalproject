@@ -5,6 +5,7 @@ const app = express();
 const HttpStatus = require('http-status');
 const validate = require('express-validation');
 const APIError = require('./APIError');
+const passport = require('passport');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());

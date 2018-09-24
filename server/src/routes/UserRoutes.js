@@ -2,7 +2,6 @@ let  express = require('express');
 let router = express.Router();
 
 let user = require('../controllers/UserControllers');
-
 var multer = require('multer');
 
 const folderName = 'uploads';
@@ -23,6 +22,7 @@ const fileFilter = (req, file, callback) => {
   }
 };
 
+
 const upload = multer({
   storage: storage,
   limits: {
@@ -34,7 +34,7 @@ const upload = multer({
 router.post('/', upload.array('avatar'), user.create);
 router.get('/', user.index);
 router.get('/:id', user.show);
-router.put('/:id', user.update);
+router.put('/:id',upload.array('avatar'), user.update);
 router.delete('/:id', user.delete);
 
 module.exports = router;

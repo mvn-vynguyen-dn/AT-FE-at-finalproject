@@ -9,6 +9,7 @@ const pictureRoute = require('./PictureRoutes');
 const planRoute = require('./PlanRoutes');
 const siteRoute = require('./SiteRoutes');
 const userRoute = require('./UserRoutes');
+const authRoute = require('./AuthRoutes');
 
 router.use('/articles', articleRoute);
 router.use('/categorys', categoryRoute);
@@ -18,5 +19,6 @@ router.use('/pictures', pictureRoute);
 router.use('/plans', planRoute);
 router.use('/sites', siteRoute);
 router.use('/users', userRoute);
+router.use('/auth', authRoute);
 
 module.exports = router;
