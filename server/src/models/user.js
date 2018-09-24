@@ -44,6 +44,12 @@ const UserSchema = new Schema({
   token: {
     type: Array,
     "default": [],
+  },
+  resetPasswordToken:{
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
   }
 }, {
   versionKey: false,
@@ -109,5 +115,5 @@ module.exports.updateField = (id, body, callback) => {
         $position: 1
       }
     }}
-  , callback)
+  , callback);
 }
