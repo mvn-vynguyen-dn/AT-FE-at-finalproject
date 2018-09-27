@@ -8,6 +8,9 @@ const PictureSchema = new Schema({
   destinationId: {
     type: mongoose.Schema.Types.ObjectId,
   },
+  articleId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
   name: {
     type: String,
     require: true,
@@ -19,8 +22,8 @@ const PictureSchema = new Schema({
 
 const Picture = module.exports = mongoose.model('Picture', PictureSchema);
 
-module.exports.create = (Picture, callback) => {
-  Picture.save(callback);
+module.exports.create = (picture, callback) => {
+  Picture.insertMany(picture, callback);
 }
 
 module.exports.index = (callback) => {
@@ -28,7 +31,7 @@ module.exports.index = (callback) => {
 }
 
 module.exports.show = (condition, callback) => {
-  Picture.findById(condition, callback);
+  Picture.find(condition, callback);
 }
 
 module.exports.remove = (Pictureid, callback) => {

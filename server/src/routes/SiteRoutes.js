@@ -3,7 +3,7 @@ let router = express.Router();
 
 let site = require('../controllers/SiteControllers');
 
-var multer = require('multer');
+const multer = require('multer');
 
 const folderName = 'uploads';
 var storage = multer.diskStorage({

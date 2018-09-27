@@ -1,27 +1,9 @@
 const Sites = require('../models/sites');
 
-const sites = [
-  {
-    "_id": "1",
-    "name": "da nang",
-    "description": "da nang mong mo ",
-  },
-  {
-    "_id": "2",
-    "name": "hue",
-    "description": "hue is the best"
-  },
-  {
-    "_id": "3",
-    "name": "Thanh Khe",
-    "description": "1 dia diem cua da nang",
-  }
-]
-
 exports.index = (req, res, next) => {
   Sites.index((err, callback) => {
     if (err) throw err;
-    res.status(200).json(sites);
+    res.status(200).json(callback);
   })
 }
 
@@ -41,20 +23,25 @@ exports.remove = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
-  const siteArr = req.body;
-  var siteObj = [];
-  console.log(req.files);
-  siteObj = siteArr.map(item => {
-    return new Sites({
-      name : item.name,
-      description: item.description,
-      listPicture: item.listPicture,
-      backgroundImg: item.backgroundImg,
-      district: item.district,
-      parentId: item.parentId
-    });
+  const listPicture = req.files
+  .filter(item => item.fieldname === 'listPicture')
+  .map(item => item.filename);
+
+  const backgroundImg = req.files
+  .filter(item => item.fieldname === 'backgroundImg')
+  .map(item => item.filename);
+
+  const site = new Sites({
+    name : req.body.name,
+    listPicture: listPicture,
+    backgroundImg: backgroundImg,
+    parentId: req.body.parentId,
+    articleSite: req.body.articleSite
   });
-  Sites.insertMany(siteObj, (err, callback) => {
+
+  console.log(site);
+
+  Sites.create(site, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });

@@ -6,13 +6,16 @@ const HttpStatus = require('http-status');
 const validate = require('express-validation');
 const APIError = require('./APIError');
 const passport = require('passport');
+const jsonwebtoken = require("jsonwebtoken");
+var secret = process.env.JWT_KEY;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
 app.use('/uploads', express.static('uploads'));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token');
   if (req.method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', 'PUT, POST, PATH, DELETE');
     return res.status(200).json({});

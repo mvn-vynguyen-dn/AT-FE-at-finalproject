@@ -169,7 +169,7 @@ exports.forgot = (req, res, next) => {
         subject: 'Password help has arrived!',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        'http://localhost:4200/auth/reset/' + token + '\n\n' +
+        'http://localhost:4200/reset/' + token + '\n\n' +
         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       transporter.sendMail(data, (err) => {
@@ -256,3 +256,12 @@ exports.showMe = (req, res, next) => {
     res.status(200).send(user);
   });
 };
+
+exports.logout = (req, res, next) => {
+  const id = req.userId;
+  const token = req.token;
+  Users.deleteToken(id, token, (err, callback) => {
+    if (err) throw err
+    res.status(200).json(callback);
+  });
+}

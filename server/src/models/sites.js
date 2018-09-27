@@ -17,7 +17,6 @@ const SiteSchema = new Schema({
   },
   articleSite: {
     type: String,
-    required: true,
   }
 }, 
 {
@@ -31,7 +30,36 @@ module.exports.create = (site, callback) => {
 }
 
 module.exports.index = (callback) => {
-  Site.find(callback);
+  Site.aggregate(
+    [
+      {
+        $lookup: 
+        {
+          from: 'articles',
+          localField: '_id',
+          foreignField: 'siteId',
+          as: 'listArticle'
+        },
+      },
+      {
+        $lookup: 
+        {
+          from: 'destinations',
+          localField: '_id',
+          foreignField: 'siteId',
+          as: 'listDestinations'
+        },
+      },
+      {
+        $project: 
+        {
+          listArticle: {
+            _id: 0,
+            content: 0
+          }
+        }
+      }
+    ], callback);
 }
 
 module.exports.show = (id, callback) => {

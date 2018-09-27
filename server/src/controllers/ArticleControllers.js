@@ -1,38 +1,43 @@
-const Album = require('../models/article');
+const Article = require('../models/article');
 
 exports.index = (req, res, next) => {
-  Album.index((err, callback) => {
+  Article.index((err, callback) => {
     if (err) throw err;
     res.status(200).json(callback);
   })
 }
 
 exports.show = (req, res, next) =>  {
-  Album.show(userName, (err, callback) => {
+  condition = {
+    _id: req.params.id
+  }
+  Article.show(condition, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });
 }
 
 exports.remove = (req, res, next) => {
-  Album.remove((err, callback) => {
+  Article.remove((err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });
 }
 
 exports.create = (req, res, next) => {
-  const artArr = req.body;
-  var artObj = [];
-  artObj = artArr.map(item => {
-    return new Album({
-      content : item.content,
-      title: item.title,
-      destinationId: item.destinationid,
-      siteId: item.siteId
-    });
+  console.log(req.body.content);
+  const article = new Article({
+    content : req.body.content,
+    title: req.body.title,
+    destinationId: req.body.destinationid,
+    siteId: req.body.siteId,
+    rating: req.body.rating,
+    userId: req.body.userId
   });
-  Album.insertMany(artObj, (err, callback) => {
+
+  console.log(article);
+
+  Article.create(article, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });
@@ -40,8 +45,10 @@ exports.create = (req, res, next) => {
 
 exports.update = (req, res, next) => {
   const id = req.params.id;
-  const body = req.body;
-  Album.update(id, body, (err, callback) => {
+  const body = {
+    'decriptions': req.body.decriptions
+};
+  Article.update(id, body, (err, callback) => {
     if (err) throw err;
     res.status(200).send(callback);
   });
@@ -49,7 +56,7 @@ exports.update = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   const id = req.params.id;
-  Album.remove(id, (err, callback) => {
+  Article.remove(id, (err, callback) => {
     if (err) throw err;
     res.status(200).send(callback);
   });

@@ -117,3 +117,15 @@ module.exports.updateField = (id, body, callback) => {
     }}
   , callback);
 }
+
+module.exports.deleteToken = (userId, token, callback) => {
+  User.update({
+    _id: userId
+  },
+  {
+    $pull:
+    {
+      token: token
+    }
+  }, callback)
+}
