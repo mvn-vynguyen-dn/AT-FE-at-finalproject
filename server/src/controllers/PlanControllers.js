@@ -1,38 +1,39 @@
 const Plan = require('../models/plan');
 
 exports.index = (req, res, next) => {
-  Plan.index((err, callback) => {
+  Plan.get((err, callback) => {
     if (err) throw err;
     res.status(200).json(callback);
   })
 }
 
 exports.show = (req, res, next) => {
-  Plan.show( (err, callback) => {
+  id = req.params.id;
+  Plan.show(id, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });
 }
 
-exports.remove = (req, res, next) => {
-  Plan.remove((err, callback) => {
-    if(err) throw err;
-    res.status(200).send(callback);
-  });
-}
+// exports.remove = (req, res, next) => {
+  
+
+//   Plan.remove(planId, (err, callback) => {
+//     if(err) throw err;
+//     res.status(200).send(callback);
+//   });
+// }
 
 exports.create = (req, res, next) => {
-  const planArr = req.body;
-  var planObj = [];
-  planObj = planArr.map(item => {
-    return new Plan({
-      datetime:item.datetime,
-      userId: item.userId,
-      peoples: item.peoples,
-      timeline: item.timeline,
-    });
+  datetime = new Date();
+  
+  plan = new Plan({
+      datetime: datetime,
+      userId: req.body.userId,
+      timeline: req.body.plans,
   });
-  Plan.insertMany(planObj, (err, callback) => {
+  
+  Plan.create(plan, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });
@@ -49,7 +50,7 @@ exports.update = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   const id = req.params.id;
-  Plan.remove(id, (err, callback) => {
+  Plan.delete(id, (err, callback) => {
     if (err) throw err;
     res.status(200).send(callback);
   });
