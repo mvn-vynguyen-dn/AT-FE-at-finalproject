@@ -32,9 +32,7 @@ exports.login = (req, res, next) => {
               { expiresIn: 86400 }
             );
             const id = user[0]._id;
-            Users.updateField(id, token, (err, callback) => {
-              console.log(callback);
-            });
+            Users.updateField(id, token, (err, callback) => {});
             return res.json(
               {
                 token: token
@@ -57,10 +55,14 @@ exports.login = (req, res, next) => {
 }
 
 exports.show = (req, res, next) => {
-  Users.show((err, callback) => {
-    if(err) throw err;
+  const id = req.params.id;
+  const conditon = {
+    _id: id
+  }
+  Users.show(conditon, (err, callback) => {
+    if (err) throw err;
     res.status(200).send(callback);
-  });
+  })
 }
 
 exports.remove = (req, res, next) => {
@@ -112,6 +114,7 @@ exports.create = (req, res, next) => {
 exports.update = (req, res, next) => {
   const id = req.params.id;
   const body = req.body;
+  console.log(body);
   Users.update(id, body, (err, callback) => {
     if (err) throw err;
     res.status(200).send(callback);
@@ -262,6 +265,6 @@ exports.logout = (req, res, next) => {
   const token = req.token;
   Users.deleteToken(id, token, (err, callback) => {
     if (err) throw err
-    res.status(200).json(callback);
+    res.status(200);
   });
 }
