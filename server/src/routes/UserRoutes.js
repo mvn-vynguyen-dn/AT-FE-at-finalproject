@@ -3,8 +3,10 @@ let router = express.Router();
 
 let user = require('../controllers/UserControllers');
 var multer = require('multer');
-
+const Validation = require('../lib/Validation');
+const Validate = require('express-validation');
 const folderName = 'uploads';
+
 var storage = multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, `./${folderName}/`);
