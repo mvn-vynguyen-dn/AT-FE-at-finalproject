@@ -24,6 +24,7 @@ const fileFilter = (req, file, callback) => {
   }
 };
 
+
 const upload = multer({
   storage: storage,
   limits: {
@@ -32,7 +33,7 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-router.post('/',Validate(Validation.request), user.create);
+router.post('/', upload.array('avatar'), user.create);
 router.get('/', user.index);
 router.get('/:id', user.show);
 router.put('/:id',upload.array('avatar'), user.update);

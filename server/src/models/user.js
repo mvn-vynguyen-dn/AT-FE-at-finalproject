@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
+const Schema = mongoose.Schema;
 const secret = process.env.JWT_KEY;
 const jwt = require('jsonwebtoken');
 
@@ -116,4 +116,16 @@ module.exports.updateField = (id, body, callback) => {
       }
     }}
   , callback);
+}
+
+module.exports.deleteToken = (userId, token, callback) => {
+  User.update({
+    _id: userId
+  },
+  {
+    $pull:
+    {
+      token: token
+    }
+  }, callback)
 }

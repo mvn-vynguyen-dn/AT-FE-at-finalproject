@@ -1,57 +1,19 @@
 const Destination = require('../models/destination');
-
-const destination = [
-  {
-    "_id" : "1",
-    "name": "quan Tau Khua",
-    "address": "Quang Trung",
-    "rating": 5,
-    "categoryId" : "1",
-    "siteId" : [
-      "1", "2", "3"
-    ]
-  },
-  {
-    "_id" : "2",
-    "name": "quan Nhat Ban",
-    "address": "Tokyo",
-    "rating": 3,
-    "categoryId" : "2",
-    "siteId" : [
-      "1", "3"
-    ]
-  },
-  {
-    "_id" : "3",
-    "name": "quan Han Quac",
-    "address": "Seoul",
-    "rating": 3,
-    "categoryId" : "3",
-    "siteId" : [
-      "3"
-    ]
-  },
-  {
-    "_id" : "4",
-    "name": "quan Viet",
-    "address": "Tokyo",
-    "rating": 3,
-    "categoryId" : "4",
-    "siteId" : [
-      "2"
-    ]
-  }
-]
+const mongoose = require('mongoose');
 
 exports.index = (req, res, next) => {
   Destination.index((err, callback) => {
     if (err) throw err;
-    res.status(200).json(destination);
+    res.status(200).json(callback);
   })
 }
 
 exports.show = (req, res, next) => {
-  Destination.show( (err, callback) => {
+  const id = req.params.id;
+  conditon = {
+    _id: mongoose.Types.ObjectId(id),
+  };
+  Destination.show(id, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });
@@ -65,18 +27,16 @@ exports.remove = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
-  const DestinationArr = req.body;
-  var DestinationObj = [];
-  DestinationObj = DestinationArr.map(item => {
-    return new Destination({
-      name:item.name,
-      address: item.address,
-      rating: item.rating,
-      categoryId: item.categoryId,
-      siteId: item.siteId,
+  const destination = new Destination({
+      name:req.body.name,
+      address: req.body.address,
+      rating: req.body.rating,
+      categoryId: req.body.categoryId,
+      siteId: req.body.siteId,
+      description: req.body.description
     });
-  });
-  Destination.insertMany(DestinationObj, (err, callback) => {
+
+  Destination.insertMany(destination, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });

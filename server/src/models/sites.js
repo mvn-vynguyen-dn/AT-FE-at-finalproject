@@ -8,17 +8,15 @@ const SiteSchema = new Schema({
   },
   listPicture: {
     type: Array,
-    "default": [],
   },
   backgroundImg: {
     type: String
   },
-  district:{
-    type: Array,
-    "default": [],
-  },
   parentId: {
     type: mongoose.Schema.Types.ObjectId,
+  },
+  articleSite: {
+    type: String,
   }
 }, 
 {
@@ -32,22 +30,40 @@ module.exports.create = (site, callback) => {
 }
 
 module.exports.index = (callback) => {
-  Site.find(callback);
+  Site.aggregate(
+    [
+      {
+        $lookup: 
+        {
+          from: 'articles',
+          localField: '_id',
+          foreignField: 'siteId',
+          as: 'listArticle'
+        },
+      },
+      {
+        $lookup: 
+        {
+          from: 'destinations',
+          localField: '_id',
+          foreignField: 'siteId',
+          as: 'listDestinations'
+        },
+      },
+      {
+        $project: 
+        {
+          listArticle: {
+            _id: 0,
+            content: 0
+          }
+        }
+      }
+    ], callback);
 }
 
 module.exports.show = (id, callback) => {
-  Site.aggregate([
-    // {
-    //   $match: {
-    //     "_id": mongoose.Types.ObjectId(id)
-    //   }
-    // },
-    {
-      $match: {
-        "parentId": mongoose.Types.ObjectId(id)
-      }
-    }
-  ], callback)
+  Site.findById(id, callback);
 }
 
 module.exports.remove = (Siteid, callback) => {

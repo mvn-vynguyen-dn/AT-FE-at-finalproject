@@ -22,15 +22,17 @@ exports.remove = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
-  const picArr = req.body;
-  var picObj = [];
-  picObj = picArr.map(item => {
+  console.log(111);
+  const listObj = req.files.map(item => {
     return new Pictures({
-      planId: item.planId,
-      destinationId: item.destinationId,
+      planId: req.body.planId,
+      destinationId: req.body.destinationId,
+      articleId: req.body.articleId,
+      name: item.filename,
     });
   });
-  Pictures.insertMany(picObj, (err, callback) => {
+
+  Pictures.insertMany(listObj, (err, callback) => {
     if(err) throw err;
     res.status(200).send(callback);
   });

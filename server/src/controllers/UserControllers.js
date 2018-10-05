@@ -32,9 +32,7 @@ exports.login = (req, res, next) => {
               { expiresIn: 86400 }
             );
             const id = user[0]._id;
-            Users.updateField(id, token, (err, callback) => {
-              console.log(callback);
-            });
+            Users.updateField(id, token, (err, callback) => {});
             return res.json(
               {
                 token: token
@@ -57,10 +55,14 @@ exports.login = (req, res, next) => {
 }
 
 exports.show = (req, res, next) => {
-  Users.show((err, callback) => {
-    if(err) throw err;
+  const id = req.params.id;
+  const conditon = {
+    _id: id
+  }
+  Users.show(conditon, (err, callback) => {
+    if (err) throw err;
     res.status(200).send(callback);
-  });
+  })
 }
 
 exports.remove = (req, res, next) => {
@@ -112,6 +114,7 @@ exports.create = (req, res, next) => {
 exports.update = (req, res, next) => {
   const id = req.params.id;
   const body = req.body;
+  console.log(body);
   Users.update(id, body, (err, callback) => {
     if (err) throw err;
     res.status(200).send(callback);
@@ -169,7 +172,7 @@ exports.forgot = (req, res, next) => {
         subject: 'Password help has arrived!',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        'http://localhost:4200/auth/reset/' + token + '\n\n' +
+        'http://localhost:4200/reset/' + token + '\n\n' +
         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       transporter.sendMail(data, (err) => {
@@ -256,3 +259,12 @@ exports.showMe = (req, res, next) => {
     res.status(200).send(user);
   });
 };
+
+exports.logout = (req, res, next) => {
+  const id = req.userId;
+  const token = req.token;
+  Users.deleteToken(id, token, (err, callback) => {
+    if (err) throw err
+    res.status(200);
+  });
+}

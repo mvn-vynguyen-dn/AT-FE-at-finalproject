@@ -1,22 +1,27 @@
 var jwt = require('express-jwt');
 var secret = process.env.JWT_KEY;
-function getTokenFromHeaders(req){
-  if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token'){
+
+getTokenFromHeaders = 
+(req) => {
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') {
     return req.headers.authorization.split(' ')[1];
   }
   return null;
 }
+
 var auth = {
-required: jwt({
-  secret: secret,
-  userProperty: 'payload',
-  getToken: getTokenFromHeaders
+  required: jwt({
+    secret: secret,
+    userProperty: 'payload',
+    getToken: getTokenFromHeaders
   }),
-optional: jwt({
-  secret: secret,
-  userProperty: 'payload',
-  credentialsRequired: false,
-  getToken: getTokenFromHeaders
-})
+
+  optional: jwt({
+    secret: secret,
+    userProperty: 'payload',
+    credentialsRequired: false,
+    getToken: getTokenFromHeaders
+  })
 };
+
 module.exports = auth;

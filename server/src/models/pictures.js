@@ -4,20 +4,26 @@ const Schema = mongoose.Schema;
 const PictureSchema = new Schema({
   planId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
   },
   destinationId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+  },
+  articleId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
+  name: {
+    type: String,
+    require: true,
   }
-},{
+},
+{
   versionKey: false
 })
 
 const Picture = module.exports = mongoose.model('Picture', PictureSchema);
 
-module.exports.create = (Picture, callback) => {
-  Picture.save(callback);
+module.exports.create = (picture, callback) => {
+  Picture.insertMany(picture, callback);
 }
 
 module.exports.index = (callback) => {
@@ -25,7 +31,7 @@ module.exports.index = (callback) => {
 }
 
 module.exports.show = (condition, callback) => {
-  Picture.findById(condition, callback);
+  Picture.find(condition, callback);
 }
 
 module.exports.remove = (Pictureid, callback) => {

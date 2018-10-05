@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Category = require('../models/category');
 const Schema = mongoose.Schema;
 
 const DestinationSchema = new Schema({
@@ -14,11 +15,17 @@ const DestinationSchema = new Schema({
   },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'Category'
   },
   siteId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: 'Site'
+  },
+  description: {
+    type: String,
+    required: true
   }
 }, {
   versionKey: false
@@ -26,16 +33,83 @@ const DestinationSchema = new Schema({
 
 const Destination = module.exports = mongoose.model('Destination', DestinationSchema);
 
-module.exports.create = (Destination, callback) => {
-  Destination.save(callback);
+module.exports.create = (destination, callback) => {
+  destination.save(callback);
 }
 
 module.exports.index = (callback) => {
-  Destination.find(callback);
+  Destination.aggregate(
+    [
+      {
+        $lookup: 
+        {
+          from: 'pictures',
+          localField: '_id',
+          foreignField: 'destinationId',
+          as: 'listPictures'
+        }
+      },
+      {
+        $lookup: 
+        {
+          from: 'categories',
+          localField: 'categoryId',
+          foreignField: '_id',
+          as: 'categorys'
+        }
+      },
+      {
+        $lookup: 
+        {
+          from: 'sites',
+          localField: 'siteId',
+          foreignField: '_id',
+          as: 'sites'
+        }
+      }
+    ], callback)
 }
 
-module.exports.show = (condition, callback) => {
-  Destination.findById(condition, callback);
+module.exports.show = (id, callback) => {
+  Destination.aggregate(
+    [
+      {
+        $match:
+        {
+          _id: mongoose.Types.ObjectId(id),
+        }
+      },
+      {
+        $lookup: 
+        {
+          from: 'pictures',
+          localField: '_id',
+          foreignField: 'destinationId',
+          as: 'listPictures'
+        }
+      },
+      {
+        $lookup: 
+        {
+          from: 'categories',
+          localField: 'categoryId',
+          foreignField: '_id',
+          as: 'categorys'
+        }
+      },
+      {
+        $lookup: 
+        {
+          from: 'sites',
+          localField: 'siteId',
+          foreignField: '_id',
+          as: 'sites'
+        }
+      }
+    ], callback);
+
+  // Destination.find(condition, callback)
+  // .populate('categoryId').populate('siteId');
 }
 
 module.exports.remove = (Destinationid, callback) => {

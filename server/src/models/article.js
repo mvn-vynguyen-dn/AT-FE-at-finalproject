@@ -11,13 +11,22 @@ const ArticleSchema = new Schema({
   },
   destinationId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
   },
   siteId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
+  },
+  time: {
+    type: String,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
+  description: {
+    type: String,
+    required: true
   }
-},{
+},
+{
   versionKey: false
 })
 
@@ -28,17 +37,37 @@ module.exports.create = (Article, callback) => {
 }
 
 module.exports.index = (callback) => {
-  Article.find(callback);
+  Article.aggregate(
+    [
+      {
+        $lookup: 
+        {
+          from: 'pictures',
+          localField: '_id',
+          foreignField: 'articleId',
+          as: 'listPictures'
+        },
+      },
+      {
+        $project: 
+        {
+          listPictures: {
+            _id: 0,
+            articleId: 0
+          }
+        }
+      }
+    ], callback);
 }
 
 module.exports.show = (condition, callback) => {
   Article.findById(condition, callback);
 }
 
-module.exports.remove = (Articleid, callback) => {
-  Article.deleteOne({_id: Articleid}, callback);
+module.exports.remove = (ArticleId, callback) => {
+  Article.deleteOne({_id: ArticleId}, callback);
 }
 
-module.exports.update = (Articleid, body, callback) => {
-  Article.findByIdAndUpdate(Articleid, body, callback);
+module.exports.update = (ArticleId, body, callback) => {
+  Article.findByIdAndUpdate(ArticleId, body, callback);
 }
