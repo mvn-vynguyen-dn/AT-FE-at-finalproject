@@ -58,3 +58,17 @@ exports.delete = (req, res, next) => {
     res.status(200).send(callback);
   });
 }
+
+exports.search = (req, res, next) => {
+  const name = req.body.name;
+  const site = req.body.site;
+  const category = req.body.category;
+  if(name) {
+    Destination.search(req.body, (err, callback) => {
+      if(err) throw err;
+      res.status(200).send(callback);
+    })
+  } else {
+    res.status(200).send("asdasdasd")
+  }
+}

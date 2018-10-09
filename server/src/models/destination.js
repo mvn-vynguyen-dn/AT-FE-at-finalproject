@@ -119,3 +119,47 @@ module.exports.remove = (Destinationid, callback) => {
 module.exports.update = (Destinationid, body, callback) => {
   Destination.findByIdAndUpdate(Destinationid, body, callback);
 }
+
+module.exports.search = (body, callback) => {
+  const name = body.name;
+  const site = body.site;
+  const category = body.category;
+  Destination.aggregate([
+    {
+      $match:
+      {
+        name: { $regex: name, $options: 'i' }
+      }
+    },
+    {
+      $lookup:
+      {
+        from: 'pictures',
+        localField: '_id',
+        foreignField: 'destinationId',
+        as: 'listPictures'
+      }
+    },
+    {
+      $lookup:
+      {
+        from: 'categories',
+        localField: 'categoryId',
+        foreignField: '_id',
+        as: 'categorys'
+      }
+    },
+    {
+      $lookup:
+      {
+        from: 'sites',
+        localField: 'siteId',
+        foreignField: '_id',
+        as: 'sites'
+      }
+    },
+  ], callback);
+  // let searchQuery = {};
+  // searchQuery.name = {$regex: name, $options: 'i'};
+  // Destination.find(searchQuery, callback);
+}
