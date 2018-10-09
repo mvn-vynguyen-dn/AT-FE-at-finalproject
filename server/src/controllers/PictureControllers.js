@@ -22,7 +22,6 @@ exports.remove = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
-  console.log(111);
   const listObj = req.files.map(item => {
     return new Pictures({
       planId: req.body.planId,
