@@ -80,7 +80,7 @@ module.exports.show = (id, callback) => {
         }
       },
       {
-        $lookup: 
+        $lookup:
         {
           from: 'pictures',
           localField: '_id',
@@ -89,7 +89,7 @@ module.exports.show = (id, callback) => {
         }
       },
       {
-        $lookup: 
+        $lookup:
         {
           from: 'categories',
           localField: 'categoryId',
@@ -98,7 +98,7 @@ module.exports.show = (id, callback) => {
         }
       },
       {
-        $lookup: 
+        $lookup:
         {
           from: 'sites',
           localField: 'siteId',
@@ -120,10 +120,7 @@ module.exports.update = (Destinationid, body, callback) => {
   Destination.findByIdAndUpdate(Destinationid, body, callback);
 }
 
-module.exports.search = (body, callback) => {
-  const name = body.name;
-  const site = body.site;
-  const category = body.category;
+module.exports.search = (name, callback) => {
   Destination.aggregate([
     {
       $match:
@@ -162,4 +159,42 @@ module.exports.search = (body, callback) => {
   // let searchQuery = {};
   // searchQuery.name = {$regex: name, $options: 'i'};
   // Destination.find(searchQuery, callback);
+}
+
+module.exports.search1 = (name, site, callback) => {
+  Destination.aggregate([
+    {
+      $match:
+      {
+        name: { $regex: name, $options: 'i' }
+      }
+    },
+    {
+      $lookup:
+      {
+        from: 'pictures',
+        localField: '_id',
+        foreignField: 'destinationId',
+        as: 'listPictures'
+      }
+    },
+    {
+      $lookup:
+      {
+        from: 'categories',
+        localField: 'categoryId',
+        foreignField: '_id',
+        as: 'categorys'
+      }
+    },
+    {
+      $lookup:
+      {
+        from: 'sites',
+        localField: 'siteId',
+        foreignField: '_id',
+        as: 'sites'
+      }
+    },
+  ], callback);
 }

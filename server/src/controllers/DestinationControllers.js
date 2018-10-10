@@ -64,11 +64,30 @@ exports.search = (req, res, next) => {
   const site = req.body.site;
   const category = req.body.category;
   if(name) {
-    Destination.search(req.body, (err, callback) => {
-      if(err) throw err;
-      res.status(200).send(callback);
-    })
+    if(site && !category) {
+      Destination.search1(name, site, (err, callback) => {
+        if(err) throw err;
+        res.status(200).send(callback);
+      })
+    } else if(category && !site) {
+      Destination.search3(category, (err, callback) => {
+        if(err) throw err;
+        res.status(200).send(callback);
+      })
+    }
+    else if(site && category) {
+      Destination.search2(req.body, (err, callback) => {
+        if(err) throw err;
+        res.status(200).send(callback);
+      })
+    }
+    else {
+      Destination.search(name, (err, callback) => {
+        if(err) throw err;
+        res.status(200).send(callback);
+      })
+    }
   } else {
-    res.status(200).send("asdasdasd")
+    res.status(400).send('Must to have a key word');
   }
 }
