@@ -70,7 +70,7 @@ exports.search = (req, res, next) => {
         res.status(200).send(callback);
       })
     } else if(category && !site) {
-      Destination.search3(category, (err, callback) => {
+      Destination.search3(name, category, (err, callback) => {
         if(err) throw err;
         res.status(200).send(callback);
       })
