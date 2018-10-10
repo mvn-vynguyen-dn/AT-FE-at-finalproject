@@ -161,111 +161,111 @@ module.exports.search = (name, callback) => {
   // Destination.find(searchQuery, callback);
 }
 
-module.exports.search1 = (name, site, callback) => {
-  Destination.aggregate([
-    {
-      $match:
-      {
-        name: { $regex: name, $options: 'i' }
-      }
-    },
-    {
-      $lookup:
-      {
-        from: 'pictures',
-        localField: '_id',
-        foreignField: 'destinationId',
-        as: 'listPictures'
-      }
-    },
-    {
-      $lookup:
-      {
-        from: 'categories',
-        localField: 'categoryId',
-        foreignField: '_id',
-        as: 'categorys'
-      }
-    },
-    {
-      $lookup:
-      {
-        from: 'sites',
-        localField: 'siteId',
-        foreignField: '_id',
-        as: 'sites'
-      }
-    },
-    {
-      $unwind: "$sites"
-    },
-    {
-      $match:
-      {
-        "sites._id": mongoose.Types.ObjectId(site),
-      }
-    },
-  ], callback);
-}
+// module.exports.search1 = (name, site, callback) => {
+//   Destination.aggregate([
+//     {
+//       $match:
+//       {
+//         name: { $regex: name, $options: 'i' }
+//       }
+//     },
+//     {
+//       $lookup:
+//       {
+//         from: 'pictures',
+//         localField: '_id',
+//         foreignField: 'destinationId',
+//         as: 'listPictures'
+//       }
+//     },
+//     {
+//       $lookup:
+//       {
+//         from: 'categories',
+//         localField: 'categoryId',
+//         foreignField: '_id',
+//         as: 'categorys'
+//       }
+//     },
+//     {
+//       $lookup:
+//       {
+//         from: 'sites',
+//         localField: 'siteId',
+//         foreignField: '_id',
+//         as: 'sites'
+//       }
+//     },
+//     {
+//       $unwind: "$sites"
+//     },
+//     {
+//       $match:
+//       {
+//         "sites._id": mongoose.Types.ObjectId(site),
+//       }
+//     },
+//   ], callback);
+// }
 
-module.exports.search2 = (body, callback) => {
-  const name = body.name;
-  const site = body.site;
-  const cate = body.category;
-  Destination.aggregate([
-    {
-      $match:
-      {
-        name: { $regex: name, $options: 'i' }
-      }
-    },
-    {
-      $lookup:
-      {
-        from: 'pictures',
-        localField: '_id',
-        foreignField: 'destinationId',
-        as: 'listPictures'
-      }
-    },
-    {
-      $lookup:
-      {
-        from: 'categories',
-        localField: 'categoryId',
-        foreignField: '_id',
-        as: 'categorys'
-      }
-    },
-    {
-      $unwind: "$categorys"
-    },
-    {
-      $match:
-      {
-        "categorys._id": mongoose.Types.ObjectId(cate),
-      }
-    },
-    {
-      $lookup:
-      {
-        from: 'sites',
-        localField: 'siteId',
-        foreignField: '_id',
-        as: 'sites'
-      }
-    },
-    {
-      $unwind: "$sites"
-    },
-    {
-      $match:
-      {
-        "sites._id": mongoose.Types.ObjectId(site),
-      }
-    },
-  ], callback);
-}
+// module.exports.search2 = (body, callback) => {
+//   const name = body.name;
+//   const site = body.site;
+//   const cate = body.category;
+//   Destination.aggregate([
+//     {
+//       $match:
+//       {
+//         name: { $regex: name, $options: 'i' }
+//       }
+//     },
+//     {
+//       $lookup:
+//       {
+//         from: 'pictures',
+//         localField: '_id',
+//         foreignField: 'destinationId',
+//         as: 'listPictures'
+//       }
+//     },
+//     {
+//       $lookup:
+//       {
+//         from: 'categories',
+//         localField: 'categoryId',
+//         foreignField: '_id',
+//         as: 'categorys'
+//       }
+//     },
+//     {
+//       $unwind: "$categorys"
+//     },
+//     {
+//       $match:
+//       {
+//         "categorys._id": mongoose.Types.ObjectId(cate),
+//       }
+//     },
+//     {
+//       $lookup:
+//       {
+//         from: 'sites',
+//         localField: 'siteId',
+//         foreignField: '_id',
+//         as: 'sites'
+//       }
+//     },
+//     {
+//       $unwind: "$sites"
+//     },
+//     {
+//       $match:
+//       {
+//         "sites._id": mongoose.Types.ObjectId(site),
+//       }
+//     },
+//   ], callback);
+// }
 
 module.exports.search3 = (name, cate, callback) => {
   Destination.aggregate([

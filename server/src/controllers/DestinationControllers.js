@@ -61,26 +61,27 @@ exports.delete = (req, res, next) => {
 
 exports.search = (req, res, next) => {
   const name = req.body.name;
-  const site = req.body.site;
+  // const site = req.body.site;
   const category = req.body.category;
   if(name) {
-    if(site && !category) {
-      Destination.search1(name, site, (err, callback) => {
-        if(err) throw err;
-        res.status(200).send(callback);
-      })
-    } else if(category && !site) {
+    // if(site && !category) {
+    //   Destination.search1(name, site, (err, callback) => {
+    //     if(err) throw err;
+    //     res.status(200).send(callback);
+    //   })
+    // } 
+    if(category) {
       Destination.search3(name, category, (err, callback) => {
         if(err) throw err;
         res.status(200).send(callback);
       })
     }
-    else if(site && category) {
-      Destination.search2(req.body, (err, callback) => {
-        if(err) throw err;
-        res.status(200).send(callback);
-      })
-    }
+    // else if(site && category) {
+    //   Destination.search2(req.body, (err, callback) => {
+    //     if(err) throw err;
+    //     res.status(200).send(callback);
+    //   })
+    // }
     else {
       Destination.search(name, (err, callback) => {
         if(err) throw err;
