@@ -1,1 +1,6 @@
 
+common:
+  - any: ['./*', './src/**']
+
+workflow:
+  - any: ['.github/workflows/**']
