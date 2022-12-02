@@ -11,7 +11,7 @@ mongoose
   })
   .catch((err) => {
     console.log(err);
-    console.log("Could not connect to the database.ow...");
+    console.log("Could not connect to the database.ow.v..");
     process.exit();
   });
 
