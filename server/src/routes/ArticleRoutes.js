@@ -5,7 +5,7 @@ var article = require("../controllers/ArticleControllers");
 
 router.post("/asd", article.create);
 router.get("/asd", article.index);
-router.get("/:iad", article.show);
+router.get("/:asd", article.show);
 router.put("/:id", article.update);
 router.delete("/:id", article.delete);
 
