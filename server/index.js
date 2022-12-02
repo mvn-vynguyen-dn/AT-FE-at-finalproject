@@ -11,7 +11,7 @@ mongoose
   })
   .catch((err) => {
     console.log(err);
-    console.log("Could not connect to the database.asd ow.v..");
+    console.log("Could not connect to the database.asd oasdw.v..");
     process.exit();
   });
 
