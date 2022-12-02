@@ -1,21 +1,20 @@
-version: 1
-common:
-  - any: ['./*', './src/**']
+repo:
+- '*'
 
-workflow:
-  - any: ['.github/workflows/**']
+# Add '@domain/core' label to any change within the 'core' package
+@domain/core:
+- package/core/*
+- package/core/**/*
 
-labels:
-  - label: "xsmall-diff"
-    size-below: 10
-  - label: "small-diff"
-    size-above: 9
-    size-below: 100
-  - label: "medium-diff"
-    size-above: 99
-    size-below: 500
-  - label: "large-diff"
-    size-above: 499
-    size-below: 1000
-  - label: "xlarge-diff"
-    size-above: 999
+# Add 'test' label to any change to *.spec.js files within the source dir
+test:
+- src/**/*.spec.js
+
+# Add 'source' label to any change to src files within the source dir EXCEPT for the docs sub-folder
+source:
+- any: ['src/**/*', '!src/docs/*']
+
+# Add 'frontend` label to any change to *.js files as long as the `main.js` hasn't changed
+frontend:
+- any: ['src/**/*.js']
+  all: ['!src/main.js']
