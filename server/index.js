@@ -11,7 +11,7 @@ mongoose
   })
   .catch((err) => {
     console.log(err);
-    console.log("Could not connect to the database.aasdsd oasdw.v..");
+    console.log("Could not connect to the dasdatabase.aasdsd oasdw.v..");
     process.exit();
   });
 
