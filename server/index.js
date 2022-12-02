@@ -7,7 +7,7 @@ mongoose.Promise = global.Promise;
 mongoose
   .connect(process.env.DB_HOST + process.env.DB_NAME)
   .then(() => {
-    console.log("Sucsess connected database");
+    console.log("Sucsess connected dataasdbase");
   })
   .catch((err) => {
     console.log(err);
